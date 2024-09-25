@@ -25,11 +25,13 @@ public class CategoryTreeViewService {
   }
 
   private List<CategoryTreeViewResponse> buildCategoryTree(List<CategoryEntity> categories) {
+    List<CategoryTreeViewResponse> convertedCategories = categories.stream()
+        .map(CategoryTreeViewResponse::convertFromEntity).toList();
     Map<Long, CategoryTreeViewResponse> categoryMap = new HashMap<>();
     List<CategoryTreeViewResponse> rootCategories = new ArrayList<>();
 
-    for (CategoryEntity category : categories) {
-      categoryMap.put(category.getId(), CategoryTreeViewResponse.convertFromEntity(category));
+    for (CategoryTreeViewResponse category : convertedCategories) {
+      categoryMap.put(category.getId(), category);
     }
 
     for (CategoryEntity category : categories) {
@@ -40,7 +42,7 @@ public class CategoryTreeViewService {
 
       CategoryTreeViewResponse parentCategory = categoryMap.get(category.getParent().getId());
       if (parentCategory != null) {
-        parentCategory.addSubCategory(CategoryTreeViewResponse.convertFromEntity(category));
+        parentCategory.addSubCategory(categoryMap.get(category.getId()));
       }
     }
 

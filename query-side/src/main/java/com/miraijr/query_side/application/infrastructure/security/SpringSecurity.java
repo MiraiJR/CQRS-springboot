@@ -18,22 +18,22 @@ import lombok.AllArgsConstructor;
 @EnableMethodSecurity
 @AllArgsConstructor
 public class SpringSecurity {
-  private final JwtAuthenticationFilter jwtAuthenticationFilter;
-  private final ExceptionHandlerFilter exceptionHandlerFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
 
-  @Bean
-  SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-    httpSecurity
-        .csrf(AbstractHttpConfigurer::disable)
-        .addFilterBefore(exceptionHandlerFilter, BasicAuthenticationFilter.class)
-        .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class)
-        .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/accounts/login").permitAll()
-            .requestMatchers("/accounts/register").permitAll()
-            .requestMatchers("/products/recommend").permitAll()
-            .requestMatchers("/categories").permitAll()
-            .anyRequest().authenticated());
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                .addFilterBefore(exceptionHandlerFilter, BasicAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class)
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/accounts/login").permitAll()
+                        .requestMatchers("/accounts/register").permitAll()
+                        .requestMatchers("/products/search").permitAll()
+                        .requestMatchers("/categories").permitAll()
+                        .anyRequest().authenticated());
 
-    return httpSecurity.build();
-  }
+        return httpSecurity.build();
+    }
 }
